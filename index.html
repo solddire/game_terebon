@@ -11,8 +11,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
   </head>
   <body>
-    <div id="unity-container" style="position: absolute; width: 100%; height: 100%; left: 0%; top: 0%;">
-	<canvas id="unity-canvas" style="position: absolute; width: 100%; height: 100%"></canvas>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -20,13 +20,18 @@
         </div>
       </div>
       <div id="unity-warning"> </div>
-          </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">Clicker</div>
+      </div>
+    </div>
     <script>
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
       var progressBarFull = document.querySelector("#unity-progress-bar-full");
-   
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
       var warningBanner = document.querySelector("#unity-warning");
 
       // Shows a temporary message banner/ribbon for a few seconds, or
@@ -54,11 +59,11 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/New folder.loader.js";
+      var loaderUrl = buildUrl + "/BuiltClicker.loader.js";
       var config = {
-        dataUrl: buildUrl + "/New folder.data.unityweb",
-        frameworkUrl: buildUrl + "/New folder.framework.js.unityweb",
-        codeUrl: buildUrl + "/New folder.wasm.unityweb",
+        dataUrl: buildUrl + "/BuiltClicker.data.unityweb",
+        frameworkUrl: buildUrl + "/BuiltClicker.framework.js.unityweb",
+        codeUrl: buildUrl + "/BuiltClicker.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Clicker",
         productName: "Clicker",
@@ -90,8 +95,8 @@
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
 
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
       }
 
       loadingBar.style.display = "block";
@@ -104,7 +109,10 @@
         }).then((unityInstance) => {
           window.unityInstance = unityInstance; // Экспортируем в глобальную переменную для FirebaseWebGL.jslib
           loadingBar.style.display = "none";
-                 }).catch((message) => {
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
           alert(message);
         });
       };
